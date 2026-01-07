@@ -1,5 +1,5 @@
 // ================= 配置区 =================
-const API_URL = 'https://rough-dream-f35a.ottopvpcorp.workers.dev/';
+const API_URL = 'https://rough-dream-f35a.ottocorp.xyz/';
 const MAP_JSON_URL = './territory_names.json';
 
 const AUTHOR_MAPPING = {
