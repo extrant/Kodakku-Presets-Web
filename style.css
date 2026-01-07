@@ -1,0 +1,120 @@
+:root {
+    --bg-dark: #121212;
+    --bg-sidebar: #1e1e24;
+    --bg-card: #25252b;
+    --primary: #f4c430; /* 经典可达鸭黄 */
+    --accent: #5865F2; /* 类似Discord的蓝紫色 */
+    --text-main: #e0e0e0;
+    --text-sub: #a0a0a0;
+    --border: #333336;
+    --success: #43b581;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; background-color: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; }
+
+/* 布局框架 */
+.app-container { display: flex; height: 100vh; }
+
+/* 左侧边栏 */
+.sidebar {
+    width: 280px; background: var(--bg-sidebar); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 20px; flex-shrink: 0;
+    overflow-y: auto;
+}
+
+.brand { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+
+.filter-group { margin-bottom: 20px; }
+.filter-group label { display: block; color: var(--text-sub); margin-bottom: 8px; font-size: 0.9rem; }
+.filter-group i { width: 20px; text-align: center; margin-right: 5px; }
+
+input, select {
+    width: 100%; padding: 10px; background: #2b2b30; border: 1px solid var(--border);
+    color: white; border-radius: 6px; outline: none; transition: border 0.2s;
+}
+input:focus, select:focus { border-color: var(--primary); }
+
+.stats-panel { margin-top: auto; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
+.stat-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+.stat-value.highlight { color: var(--primary); font-weight: bold; }
+
+.footer-info { margin-top: 15px; font-size: 0.75rem; color: #555; text-align: center; }
+
+/* 右侧主内容 */
+.main-content { flex: 1; display: flex; flex-direction: column; background: var(--bg-dark); }
+
+.top-bar {
+    height: 60px; padding: 0 30px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; background: rgba(30,30,36, 0.95);
+}
+.status-indicator { font-size: 0.9rem; color: var(--text-sub); }
+
+/* --- 核心：卡片网格系统 --- */
+.grid-container {
+    padding: 30px;
+    overflow-y: auto;
+    display: grid;
+    /* 智能网格：最小宽度320px，自动填满行 */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 20px;
+}
+
+/* 卡片样式 */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* 垂直布局 */
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    height: 100%; /* 撑满网格单元的高度 */
+}
+
+.card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); border-color: var(--primary); }
+
+/* 左侧装饰条 */
+.card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: var(--border); border-radius: 8px 0 0 8px; transition: background 0.2s;
+}
+.card:hover::before { background: var(--primary); }
+
+.card-body { padding: 20px; flex: 1; /* 让这部分占据剩余空间，把按钮顶到底部 */ }
+
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.preset-title { font-size: 1.1rem; font-weight: bold; color: #fff; line-height: 1.4; }
+.version-tag { background: #333; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; color: var(--text-sub); white-space: nowrap; margin-left: 10px; }
+
+.author-info { font-size: 0.9rem; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 5px; }
+
+.tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+.tag-map { background: rgba(88, 101, 242, 0.15); color: #8ea0ff; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; }
+
+.desc-box { 
+    font-size: 0.85rem; color: #aaa; background: rgba(0,0,0,0.2); 
+    padding: 10px; border-radius: 6px; line-height: 1.5; white-space: pre-wrap;
+    max-height: 100px; overflow-y: auto; /* 防止描述过长破坏布局 */
+}
+
+/* 底部操作栏 */
+.card-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.1);
+}
+
+.btn-copy {
+    width: 100%; padding: 10px; border: none; border-radius: 6px;
+    background: var(--primary); color: #1a1a1e; font-weight: bold; cursor: pointer;
+    transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;
+}
+.btn-copy:hover { opacity: 0.9; transform: scale(1.02); }
+.btn-copy.success { background: var(--success); color: white; }
+
+/* 滚动条美化 */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }

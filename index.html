@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可达鸭预设检索站</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fas fa-duck fa-lg"></i> 可达鸭预设检索站
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label><i class="fas fa-search"></i> 关键词搜索</label>
+                    <input type="text" id="searchInput" placeholder="搜索名称、作者...">
+                </div>
+
+                <div class="filter-group">
+                    <label><i class="fas fa-dungeon"></i> 副本/地图筛选</label>
+                    <select id="dungeonFilter">
+                        <option value="ALL">全部地图</option>
+                        </select>
+                </div>
+
+                <div class="filter-group">
+                    <label><i class="fas fa-user-circle"></i> 作者筛选</label>
+                    <select id="authorFilter">
+                        <option value="ALL">全部作者</option>
+                        </select>
+                </div>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <span class="stat-label">已加载预设</span>
+                    <span class="stat-value" id="totalCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">当前显示</span>
+                    <span class="stat-value highlight" id="displayCount">0</span>
+                </div>
+            </div>
+            
+            <div class="footer-info">
+                数据来源: Github/Worker<br>
+                Powered by Cloudflare
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2>预设列表</h2>
+                <div class="status-indicator" id="networkStatus">
+                    <i class="fas fa-circle-notch fa-spin"></i> 正在连接数据中枢...
+                </div>
+            </header>
+
+            <div id="gridContainer" class="grid-container">
+                </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
