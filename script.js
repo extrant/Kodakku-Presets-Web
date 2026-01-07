@@ -9,9 +9,9 @@ const AUTHOR_MAPPING = {
 };
 // =========================================
 
-// 状态变量
 let globalData = {
     presets: [],
+    sources: [], // 存储源地址列表
     maps: {}
 };
 
@@ -39,7 +39,9 @@ async function initApp() {
 
         if (!presetsRes.ok || !mapsRes.ok) throw new Error("服务器连接失败");
 
-        globalData.presets = await presetsRes.json();
+        // 解析新结构
+        globalData.presets = data.p; // 预设列表
+        globalData.sources = data.s; // 源索引字典
         globalData.maps = await mapsRes.json();
 
         // 初始化过滤器选项
@@ -133,9 +135,12 @@ function renderCards(data) {
                 <div class="desc-box">${descText}</div>
             </div>
             
-            <div class="card-footer">
-                <button class="btn-copy" onclick="handleCopy(this, '${item.DownloadUrl}')">
-                    <i class="fas fa-copy"></i> 复制 JSON 链接
+            <div class="card-footer" style="display: flex; gap: 8px;">
+                <button class="btn-copy" style="flex: 1;" onclick="handleCopy(this, '${repoUrl}')">
+                    <i class="fas fa-archive"></i> 复制在线库
+                </button>
+                <button class="btn-copy" style="flex: 1; background: var(--secondary-btn-color, #6e8efb);" onclick="handleCopy(this, '${item.DownloadUrl}')">
+                    <i class="fas fa-file-code"></i> 复制脚本链
                 </button>
             </div>
         `;
