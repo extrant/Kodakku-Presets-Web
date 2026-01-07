@@ -118,3 +118,15 @@ input:focus, select:focus { border-color: var(--primary); }
 ::-webkit-scrollbar-track { background: var(--bg-dark); }
 ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* 修改 card-footer 确保按钮平分空间 */
+.card-footer {
+    display: flex;
+    gap: 8px;
+    padding: 12px 15px;
+}
+
+.btn-copy {
+    padding: 8px 4px !important; /* 稍微缩小内边距防止文字溢出 */
+    font-size: 0.85rem;
+}
