@@ -19,6 +19,7 @@ const dom = {
     grid: document.getElementById('gridContainer'),
     status: document.getElementById('networkStatus'),
     searchInput: document.getElementById('searchInput'),
+    dungeonSearchInput: document.getElementById('dungeonSearchInput'),
     dungeonFilter: document.getElementById('dungeonFilter'),
     authorFilter: document.getElementById('authorFilter'),
     countTotal: document.getElementById('totalCount'),
@@ -117,17 +118,23 @@ function applyFilters() {
     const keyword = dom.searchInput.value.toLowerCase();
     const targetAuthor = dom.authorFilter.value;
     const targetDungeon = dom.dungeonFilter.value;
+    const dungeonKeyword = dom.dungeonSearchInput.value.toLowerCase();
 
     const filtered = globalData.presets.filter(item => {
         if (targetAuthor !== 'ALL' && item.a !== targetAuthor) return false;
         if (targetDungeon !== 'ALL' && !(item.t || []).some(id => String(id) === targetDungeon)) return false;
-        const searchPool = `${item.n} ${getAuthorName(item.a)}`.toLowerCase();
+
+        const mapNames = (item.t || []).map(id => getMapName(id));
+        if (dungeonKeyword && !mapNames.some(name => name.toLowerCase().includes(dungeonKeyword))) return false;
+
+        const searchPool = `${item.n} ${getAuthorName(item.a)} ${mapNames.join(' ')}`.toLowerCase();
         return !keyword || searchPool.includes(keyword);
     });
     renderCards(filtered);
 }
 
 dom.searchInput.addEventListener('input', applyFilters);
+dom.dungeonSearchInput.addEventListener('input', applyFilters);
 dom.authorFilter.addEventListener('change', applyFilters);
 dom.dungeonFilter.addEventListener('change', applyFilters);
 
