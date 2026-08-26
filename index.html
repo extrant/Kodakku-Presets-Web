@@ -11,19 +11,25 @@
 <body>
 
     <div class="app-container">
-        <aside class="sidebar">
-            <div class="brand">
-                <i class="fas fa-duck fa-lg"></i> 可达鸭预设检索站
+        <!-- 桌面端为固定侧栏；800px 以下由 script.js 切换为可开关的筛选抽屉。 -->
+        <aside class="sidebar" id="filterSidebar" aria-label="预设筛选">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <i class="fas fa-duck fa-lg" aria-hidden="true"></i> 可达鸭预设检索站
+                </div>
+                <button class="icon-button sidebar-close" id="closeFilters" type="button" aria-label="关闭筛选">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
             </div>
 
             <div class="filter-section">
                 <div class="filter-group">
-                    <label><i class="fas fa-search"></i> 关键词搜索</label>
+                    <label for="searchInput"><i class="fas fa-search" aria-hidden="true"></i> 关键词搜索</label>
                     <input type="text" id="searchInput" placeholder="搜索名称、作者...">
                 </div>
 
                 <div class="filter-group">
-                    <label><i class="fas fa-dungeon"></i> 副本/地图筛选</label>
+                    <label for="dungeonSearchInput"><i class="fas fa-dungeon" aria-hidden="true"></i> 副本/地图筛选</label>
                     <input type="text" id="dungeonSearchInput" placeholder="输入地图名称筛选..." style="margin-bottom: 8px;">
                     <select id="dungeonFilter">
                         <option value="ALL">全部地图</option>
@@ -31,7 +37,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label><i class="fas fa-user-circle"></i> 作者筛选</label>
+                    <label for="authorFilter"><i class="fas fa-user-circle" aria-hidden="true"></i> 作者筛选</label>
                     <select id="authorFilter">
                         <option value="ALL">全部作者</option>
                         </select>
@@ -45,7 +51,7 @@
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">当前显示</span>
-                    <span class="stat-value highlight" id="displayCount">0</span>
+                    <span class="stat-value highlight" id="displayCount" aria-live="polite">0</span>
                 </div>
             </div>
             
@@ -57,9 +63,16 @@
 
         <main class="main-content">
             <header class="top-bar">
-                <h2>预设列表</h2>
-                <div class="status-indicator" id="networkStatus">
-                    <i class="fas fa-circle-notch fa-spin"></i> 正在连接中转API...
+                <div class="top-bar-title">
+                    <!-- 仅在移动端显示，并通过 aria-expanded 同步抽屉状态。 -->
+                    <button class="filter-toggle" id="openFilters" type="button" aria-controls="filterSidebar" aria-expanded="false">
+                        <i class="fas fa-sliders-h" aria-hidden="true"></i>
+                        <span>筛选</span>
+                    </button>
+                    <h2>预设列表</h2>
+                </div>
+                <div class="status-indicator" id="networkStatus" role="status" aria-live="polite">
+                    <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> 正在连接中转API...
                 </div>
             </header>
 
@@ -67,6 +80,8 @@
                 </div>
         </main>
     </div>
+    <!-- 移动端抽屉遮罩：既阻止误触主内容，也提供点击关闭入口。 -->
+    <button class="sidebar-backdrop" id="filterBackdrop" type="button" aria-label="关闭筛选" tabindex="-1"></button>
 
     <script src="script.js"></script>
 </body>

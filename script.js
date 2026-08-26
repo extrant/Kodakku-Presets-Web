@@ -23,8 +23,30 @@ const dom = {
     dungeonFilter: document.getElementById('dungeonFilter'),
     authorFilter: document.getElementById('authorFilter'),
     countTotal: document.getElementById('totalCount'),
-    countDisplay: document.getElementById('displayCount')
+    countDisplay: document.getElementById('displayCount'),
+    openFilters: document.getElementById('openFilters'),
+    closeFilters: document.getElementById('closeFilters'),
+    filterBackdrop: document.getElementById('filterBackdrop'),
+    filterSidebar: document.getElementById('filterSidebar')
 };
+
+let lastFocusedElement = null;
+
+/**
+ * 统一切换移动端筛选抽屉。
+ * 同步 body 样式状态与 aria-expanded，并在关闭后恢复触发元素焦点，
+ * 以保证鼠标、触屏和键盘操作得到一致体验。
+ */
+function setFiltersOpen(isOpen) {
+    document.body.classList.toggle('filters-open', isOpen);
+    dom.openFilters.setAttribute('aria-expanded', String(isOpen));
+    if (isOpen) {
+        lastFocusedElement = document.activeElement;
+        dom.searchInput.focus();
+    } else if (lastFocusedElement) {
+        lastFocusedElement.focus();
+    }
+}
 
 async function initApp() {
     try {
@@ -137,5 +159,22 @@ dom.searchInput.addEventListener('input', applyFilters);
 dom.dungeonSearchInput.addEventListener('input', applyFilters);
 dom.authorFilter.addEventListener('change', applyFilters);
 dom.dungeonFilter.addEventListener('change', applyFilters);
+
+// 移动端筛选抽屉支持按钮、遮罩和 Esc 三种关闭方式。
+dom.openFilters.addEventListener('click', () => setFiltersOpen(true));
+dom.closeFilters.addEventListener('click', () => setFiltersOpen(false));
+dom.filterBackdrop.addEventListener('click', () => setFiltersOpen(false));
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && document.body.classList.contains('filters-open')) {
+        setFiltersOpen(false);
+    }
+});
+
+// 从移动端切换回桌面宽度时清除残留状态，避免遮罩或焦点状态滞留。
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 800 && document.body.classList.contains('filters-open')) {
+        setFiltersOpen(false);
+    }
+});
 
 initApp();
