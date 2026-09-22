@@ -73,10 +73,18 @@ async function initApp() {
 }
 
 const getAuthorName = (name) => AUTHOR_MAPPING[name] || name;
+// 规范的 "A & B" / "A and B" 拆成多位作者，作为共同作品；
+// 含其他标点（逗号、括号等）说明是自由描述文本，保持原样
+const splitAuthors = (raw) => {
+    const name = String(raw || '').trim();
+    if (/[,，、;；:：()（）\/|]/.test(name)) return [name];
+    return name.split(/\s*&\s*|\s+and\s+/i).map(s => s.trim()).filter(Boolean);
+};
+const getAuthorsDisplay = (raw) => splitAuthors(raw).map(getAuthorName).join(' & ');
 const getMapName = (id) => globalData.maps[id] || `未知区域 (${id})`;
 
 function initFilters() {
-    const authors = new Set(globalData.presets.map(p => p.a));
+    const authors = new Set(globalData.presets.flatMap(p => splitAuthors(p.a)));
     Array.from(authors).sort().forEach(auth => {
         dom.authorFilter.add(new Option(getAuthorName(auth), auth));
     });
@@ -109,7 +117,7 @@ function renderCards(data) {
                     <div class="preset-title">${item.n}</div>
                     <div class="version-tag">v${item.v}</div>
                 </div>
-                <div class="author-info"><i class="fas fa-user-edit"></i> ${getAuthorName(item.a)}</div>
+                <div class="author-info"><i class="fas fa-user-edit"></i> ${getAuthorsDisplay(item.a)}</div>
                 <div class="tags-container">${mapTags}</div>
                 <div class="desc-box">${descText}</div>
             </div>
@@ -143,13 +151,13 @@ function applyFilters() {
     const dungeonKeyword = dom.dungeonSearchInput.value.toLowerCase();
 
     const filtered = globalData.presets.filter(item => {
-        if (targetAuthor !== 'ALL' && item.a !== targetAuthor) return false;
+        if (targetAuthor !== 'ALL' && !splitAuthors(item.a).includes(targetAuthor)) return false;
         if (targetDungeon !== 'ALL' && !(item.t || []).some(id => String(id) === targetDungeon)) return false;
 
         const mapNames = (item.t || []).map(id => getMapName(id));
         if (dungeonKeyword && !mapNames.some(name => name.toLowerCase().includes(dungeonKeyword))) return false;
 
-        const searchPool = `${item.n} ${getAuthorName(item.a)} ${mapNames.join(' ')}`.toLowerCase();
+        const searchPool = `${item.n} ${item.a} ${getAuthorsDisplay(item.a)} ${mapNames.join(' ')}`.toLowerCase();
         return !keyword || searchPool.includes(keyword);
     });
     renderCards(filtered);
