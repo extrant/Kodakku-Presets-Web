@@ -21,6 +21,7 @@ const REPO_SOURCES = [
   "https://raw.githubusercontent.com/lr0452/KodakkuAssistScript/refs/heads/master/OnlineRepo.json",
   "https://raw.githubusercontent.com/Meedvast/KDA-Script/refs/heads/main/OnlineRepo.json",
   "https://raw.githubusercontent.com/KurotsukiRuri/Drawing/refs/heads/main/OnlineRepo.json",
+  "https://raw.githubusercontent.com/Aizen232503/KodakkuAssistScript/main/OnlineRepo.json",
 
 ];
 
